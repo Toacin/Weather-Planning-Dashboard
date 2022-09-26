@@ -6,7 +6,7 @@ function citySubmitHandler() {
         return;
     }
     $submittedCity = $citySubmit.siblings(`input`).val();
-    getCord($submittedCity);
+    getCord($submittedCity.trim());
     $citySubmit.siblings(`input`).val(``);
     $(`#cityList`).append(`<a href="#" class="list-group-item list-group-item-action list-group-item-info">${$submittedCity}</a>`);
     $(`#bigCityDisplay`).text(`${$submittedCity}`);
@@ -14,7 +14,6 @@ function citySubmitHandler() {
 }
 
 function getCord(city) {
-    console.log($submittedCity);
     let requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=d707b8ed3b053f7a5311a05774362adc`;
 
     fetch(requestUrl)
@@ -22,7 +21,27 @@ function getCord(city) {
             return response.json();
         })
         .then(function (data) {
+            lat = data[0].lat;
+            lon = data[0].lon;
+            getWeather(lat, lon);
+        });
+}
+
+function getWeather(lattitude, longitude) {
+    let requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lattitude}&lon=${longitude}&appid=d707b8ed3b053f7a5311a05774362adc`;
+
+    fetch(requestUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
             console.log(data);
+            temp = 1.8*(data.main.temp-273) + 32;
+            wind = data.wind.speed;
+            humidity = data.main.humidity;
+            console.log(temp.toFixed(1) +'° farenheit');
+            console.log(wind + ' mph');
+            console.log(humidity + ' %');
         });
 }
 
