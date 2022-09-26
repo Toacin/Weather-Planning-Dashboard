@@ -1,6 +1,4 @@
-console.log("linked");
-
-$citySubmit = $(`#searchButton`)
+$citySubmit = $(`#searchButton`);
 
 function citySubmitHandler() {
     if (!$citySubmit.siblings(`input`).val().trim()) {
@@ -8,11 +6,24 @@ function citySubmitHandler() {
         return;
     }
     $submittedCity = $citySubmit.siblings(`input`).val();
-    console.log($submittedCity);
+    getCord($submittedCity);
     $citySubmit.siblings(`input`).val(``);
     $(`#cityList`).append(`<a href="#" class="list-group-item list-group-item-action list-group-item-info">${$submittedCity}</a>`);
     $(`#bigCityDisplay`).text(`${$submittedCity}`);
     addForecastCards();
+}
+
+function getCord(city) {
+    console.log($submittedCity);
+    let requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=d707b8ed3b053f7a5311a05774362adc`;
+
+    fetch(requestUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+        });
 }
 
 index=0;
@@ -75,7 +86,6 @@ function addForecastCards() {
         </div>
     </div>`);
     index = index+1;
-    console.log(index);
 }
 
 $citySubmit.on(`click`, citySubmitHandler);
