@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/stylesheet.css">
+    <title>Weather Planning Dashboard</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav">
+        <div class="container-fluid">
+            <a class="navbar-brand navTitle" href="./index.html">Weather Planning Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active links" aria-current="page" href="#">Github</a>
+                    <a class="nav-link links" href="#">LinkedIn</a>
+                    <a class="nav-link links" href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="row justify-content-around my-5 align-items-start cont">
+        <section class="card city-card col-md-4 col-xxl-2 forecastCards" style="width: 18rem;">
+            <div class="card-body">
+                <h3 class="card-title city-title">Search City:</h3>
+                <input class="my-2 searchInput" type="text" placeholder="e.g. Phoenix">
+                <button type="button" class="btn btn-info my-2" id="searchButton">Search</button>
+                <p class="card-text">Enter city above to receive current weather information and five-day forecast</p>
+            </div>
+            <div class="list-group my-3" id="cityList">
+            </div>
+        </section>
+        <section class="row col-md-8 col-xxl-9">
+            <div class="jumbotron col-12">
+                <h1 class="display-4 bigCity" id="bigCityDisplay">Welcome to the Weather Dashboard!</h1>
+                <p class="lead">Temp: 84 F</p>
+                <hr class="my-4">
+                <p class="lead">Wind: 6.67 MPH</p>
+                <hr class="my-4">
+                <p class="lead">Humidity: 46%</p>
+                <hr class="my-4">
+                <p class="lead">UV Index: .47</p>
+            </div>
+            <div class="row col-12 justify-content-around" id="forecastCardsList"></div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="./assets/script.js"></script>
+</body>
+
+</html>
