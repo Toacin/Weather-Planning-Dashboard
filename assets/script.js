@@ -59,6 +59,7 @@ function getWeather(lattitude, longitude) {
                 dailyHumidity[i] = data.daily[i+1].humidity;
             }
             localStorage.setItem($submittedCity, JSON.stringify({
+                localCity: $submittedCity,
                 localDate: date,
                 localTemp: temp,
                 localWind: wind,
@@ -121,9 +122,23 @@ function addForecastCards() {
     }
 }
 
+function init() {
+    if(localStorage.length===0) {
+        return;
+    }
+    for (i=0; i<localStorage.length; i++) {
+        $submittedCity = JSON.parse((localStorage.getItem(localStorage.key(i)))).localCity;
+        $(`#cityList`).append(`<a href="#" class="list-group-item list-group-item-action list-group-item-info searchedCities">${$submittedCity}</a>`);
+    }
+}
+
 $citySubmit.on(`click`, citySubmitHandler);
 
 $(`#cityList`).on(`click`, `.searchedCities`, function() {
     $submittedCity = $(this).text();
     updateDom($submittedCity);
 })
+
+$(`#clearSearch`).on
+
+init();
