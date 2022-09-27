@@ -12,12 +12,21 @@ let dailyHumidity = [];
 let dailyIconURL = [];
 let $submittedCity = '';
 
+// on submission of a city name, this function will start weather gathering functions, if certain checks are passed.
 function citySubmitHandler() {
-    if (!$citySubmit.siblings(`input`).val().trim()) {
+    $submittedCity = $citySubmit.siblings(`input`).val().trim().toUpperCase();
+    searchedCities = [];
+    for (i=0; i<$('.searchedCities').length; i++) {
+        searchedCities.push($(`.searchedCities`)[i].text)
+    }
+    if (searchedCities.includes($submittedCity)){
+        updateDom($submittedCity);
+        return;
+    }
+    if (!$submittedCity) {
         $citySubmit.siblings(`input`).val(``);
         return;
     }
-    $submittedCity = $citySubmit.siblings(`input`).val().trim();
     getCord($submittedCity);
 }
 
@@ -55,7 +64,7 @@ function getWeather(lattitude, longitude) {
             wind = data.current.wind_speed;
             humidity = data.current.humidity;
             uvIndex = data.current.uvi;
-            iconURL = `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
+            iconURL = `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
             for (i=0; i<5; i++) {
                 dailyDate[i] = moment(data.daily[i+1].dt, 'X').format('LL');
                 dailyTemp[i] = data.daily[i+1].temp.day.toFixed(1);
@@ -116,6 +125,7 @@ function updateDom(city) {
     addForecastCards();
 }
 
+// this function is called from the updateDOM function and adds or updates 5-day forecast
 function addForecastCards() {
     $(`#forecastCardsList`).empty();
     for (i=0; i<5; i++) {
@@ -134,6 +144,7 @@ function addForecastCards() {
     }
 }
 
+//this function initializes the search history from local storage
 function init() {
     if(localStorage.length===0) {
         return;
@@ -144,8 +155,10 @@ function init() {
     }
 }
 
+// on click of submit button, call submithandler function
 $citySubmit.on(`click`, citySubmitHandler);
 
+// on click of one of the searched cities in history, updateDOM with 
 $(`#cityList`).on(`click`, `.searchedCities`, function() {
     $submittedCity = $(this).text();
     updateDom($submittedCity);
