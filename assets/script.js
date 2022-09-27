@@ -15,8 +15,8 @@ function citySubmitHandler() {
         $citySubmit.siblings(`input`).val(``);
         return;
     }
-    $submittedCity = $citySubmit.siblings(`input`).val();
-    getCord($submittedCity.trim());
+    $submittedCity = $citySubmit.siblings(`input`).val().trim();
+    getCord($submittedCity);
 }
 
 // this retrieves coordinates of a city given its name from GEOlocator API
@@ -59,14 +59,35 @@ function getWeather(lattitude, longitude) {
                 dailyWind[i] = data.daily[i+1].wind_speed;
                 dailyHumidity[i] = data.daily[i+1].humidity;
             }
-            updateDom();
+            localStorage.setItem($submittedCity, JSON.stringify({
+                localDate: date,
+                localTemp: temp,
+                localWind: wind,
+                localHumidity: humidity,
+                localUVIndex: uvIndex,
+                localDailyDate: dailyDate,
+                localDailyTemp: dailyTemp,
+                localDailyWind: dailyWind,
+                localDailyHumidity: dailyHumidity
+            }))
+            updateDom($submittedCity);
         });
 }
 
 // this function will update the dom
-function updateDom() {
+function updateDom(city) {
+    currentCityInfo = JSON.parse(localStorage.getItem(city));
+    date = currentCityInfo.localDate;
+    temp = currentCityInfo.localTemp;
+    wind = currentCityInfo.localWind;
+    humidity = currentCityInfo.localHumidity;
+    uvIndex = currentCityInfo.localUVIndex;
+    dailyDate = currentCityInfo.localDailyDate;
+    dailyTemp = currentCityInfo.localDailyTemp;
+    dailyWind = currentCityInfo.localDailyWind;
+    dailyHumidity = currentCityInfo.localDailyHumidity;
     $citySubmit.siblings(`input`).val(``);
-    $(`#bigCityDisplay`).text(`${$submittedCity} - ${date}`);
+    $(`#bigCityDisplay`).text(`${city} - ${date}`);
     $(`#bigTemp`).text(`Temperature: ${temp}°F`);
     $(`#bigWind`).text(`Wind Speed: ${wind} mph`);
     $(`#bigHumidity`).text(`Humidity: ${humidity}%`);
@@ -87,7 +108,7 @@ function addForecastCards() {
     $(`#forecastCardsList`).empty();
     for (i=0; i<5; i++) {
         $(`#forecastCardsList`).append(`
-        <div class="card col-2 forecastCards my-2" style="width: 18rem;">
+        <div class="card col-2 forecastCards my-2 forecastCardItem" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card- my-3">${dailyDate[i]}</h5>
                 <p class="card-text">Temp: ${dailyTemp[i]}°F</p>
@@ -102,3 +123,4 @@ function addForecastCards() {
 }
 
 $citySubmit.on(`click`, citySubmitHandler);
+
