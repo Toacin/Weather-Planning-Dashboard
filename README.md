@@ -34,4 +34,4 @@ Open Source
 ## Images of Application
 
 ### Application Image
-![App Screenshot](./Assets/Images/AppScreenshot.JPG "Screenshot of Application")
+![App Screenshot](./assets/Images/AppScreenshot.JPG "Screenshot of Application")
