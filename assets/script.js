@@ -4,10 +4,12 @@ let temp = '';
 let wind = '';
 let humidity = '';
 let uvIndex = '';
+let iconURL = '';
 let dailyDate = [];
 let dailyTemp = [];
 let dailyWind = [];
 let dailyHumidity = [];
+let dailyIconURL = [];
 let $submittedCity = '';
 
 function citySubmitHandler() {
@@ -47,16 +49,20 @@ function getWeather(lattitude, longitude) {
             return response.json();
         })
         .then(function (data) {
+            console.log(data);
             date = moment(data.current.dt, 'X').format('LL');
             temp = data.current.temp.toFixed(1);
             wind = data.current.wind_speed;
             humidity = data.current.humidity;
             uvIndex = data.current.uvi;
+            iconURL = `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
             for (i=0; i<5; i++) {
                 dailyDate[i] = moment(data.daily[i+1].dt, 'X').format('LL');
                 dailyTemp[i] = data.daily[i+1].temp.day.toFixed(1);
                 dailyWind[i] = data.daily[i+1].wind_speed;
                 dailyHumidity[i] = data.daily[i+1].humidity;
+                dailyIconURL[i] = `https://openweathermap.org/img/wn/${data.daily[i+1].weather[0].icon}@2x.png`;
+                console.log(dailyIconURL[i]);
             }
             localStorage.setItem($submittedCity, JSON.stringify({
                 localCity: $submittedCity,
@@ -65,10 +71,12 @@ function getWeather(lattitude, longitude) {
                 localWind: wind,
                 localHumidity: humidity,
                 localUVIndex: uvIndex,
+                localIconURL: iconURL,
                 localDailyDate: dailyDate,
                 localDailyTemp: dailyTemp,
                 localDailyWind: dailyWind,
-                localDailyHumidity: dailyHumidity
+                localDailyHumidity: dailyHumidity,
+                localDailyIconURL: dailyIconURL
             }))
             $(`#cityList`).append(`<a href="#" class="list-group-item list-group-item-action list-group-item-info searchedCities">${$submittedCity}</a>`);
             updateDom($submittedCity);
@@ -83,12 +91,16 @@ function updateDom(city) {
     wind = currentCityInfo.localWind;
     humidity = currentCityInfo.localHumidity;
     uvIndex = currentCityInfo.localUVIndex;
+    iconURL = currentCityInfo.localIconURL;
     dailyDate = currentCityInfo.localDailyDate;
     dailyTemp = currentCityInfo.localDailyTemp;
     dailyWind = currentCityInfo.localDailyWind;
     dailyHumidity = currentCityInfo.localDailyHumidity;
+    dailyIconURL = currentCityInfo.localDailyIconURL;
     $citySubmit.siblings(`input`).val(``);
     $(`#bigCityDisplay`).text(`${city} - ${date}`);
+    $(`#bigCityDisplay`).append(`<img src='' id='bigIcon'>`);
+    $(`#bigIcon`).attr(`src`, iconURL);
     $(`#bigTemp`).text(`Temperature: ${temp}°F`);
     $(`#bigWind`).text(`Wind Speed: ${wind} mph`);
     $(`#bigHumidity`).text(`Humidity: ${humidity}%`);
@@ -110,7 +122,7 @@ function addForecastCards() {
         $(`#forecastCardsList`).append(`
         <div class="card col-2 forecastCards my-2" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card- my-3">${dailyDate[i]}</h5>
+                <h5 class="card- my-3">${dailyDate[i]}<img src='${dailyIconURL[i]}' id='smallIcon'></h5>
                 <p class="card-text">Temp: ${dailyTemp[i]}°F</p>
                 <hr class="my-4">
                 <p class="card-text">Wind: ${dailyWind[i]} mph</p>
@@ -139,6 +151,19 @@ $(`#cityList`).on(`click`, `.searchedCities`, function() {
     updateDom($submittedCity);
 })
 
-$(`#clearSearch`).on
+$(`#clearSearch`).on(`click`, function() {
+    $(`#cityList`).empty();
+    $(`#forecastCardsList`).empty();
+    localStorage.clear();
+    init();
+    $(`#bigCityDisplay`).text(`Enter a City to Begin`);
+    $(`#bigIcon`).attr(`src`, ``);
+    $(`#bigTemp`).text(`Temperature: `);
+    $(`#bigWind`).text(`Wind Speed: `);
+    $(`#bigHumidity`).text(`Humidity: `);
+    $(`#bigUVI`).text(`UV Index: `);
+    $(`#bigUVI`).css("font-weight", "300");
+    $(`#bigUVI`).css("color", "#212529");
+})
 
 init();
