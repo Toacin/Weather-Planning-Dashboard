@@ -16,17 +16,21 @@ let $submittedCity = '';
 function citySubmitHandler() {
     $submittedCity = $citySubmit.siblings(`input`).val().trim().toUpperCase();
     searchedCities = [];
+    // this will append previously stored searched cities into an arry
     for (i=0; i<$('.searchedCities').length; i++) {
         searchedCities.push($(`.searchedCities`)[i].text)
     }
+    // will only pass this check if searched city hasn't been searched already. If so, update dom with data from previous search of that city
     if (searchedCities.includes($submittedCity)){
         updateDom($submittedCity);
         return;
     }
+    // if searched city is empty, do nothing and clear search bar
     if (!$submittedCity) {
         $citySubmit.siblings(`input`).val(``);
         return;
     }
+    // if all checks pass, retrieve coordinates of city
     getCord($submittedCity);
 }
 
@@ -45,6 +49,7 @@ function getCord(city) {
             }
             lat = data[0].lat;
             lon = data[0].lon;
+            // retrieved coordinates of searched city now passed into weather api
             getWeather(lat, lon);
         });
 }
@@ -58,13 +63,14 @@ function getWeather(lattitude, longitude) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            // get current date and all other weather info
             date = moment(data.current.dt, 'X').format('LL');
             temp = data.current.temp.toFixed(1);
             wind = data.current.wind_speed;
             humidity = data.current.humidity;
             uvIndex = data.current.uvi;
             iconURL = `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
+            // for loop will get data for 5 days and store in an array, hence 5 iterations
             for (i=0; i<5; i++) {
                 dailyDate[i] = moment(data.daily[i+1].dt, 'X').format('LL');
                 dailyTemp[i] = data.daily[i+1].temp.day.toFixed(1);
@@ -73,6 +79,7 @@ function getWeather(lattitude, longitude) {
                 dailyIconURL[i] = `https://openweathermap.org/img/wn/${data.daily[i+1].weather[0].icon}@2x.png`;
                 console.log(dailyIconURL[i]);
             }
+            // store all data in local storage with the key of the searched city
             localStorage.setItem($submittedCity, JSON.stringify({
                 localCity: $submittedCity,
                 localDate: date,
@@ -87,13 +94,15 @@ function getWeather(lattitude, longitude) {
                 localDailyHumidity: dailyHumidity,
                 localDailyIconURL: dailyIconURL
             }))
+            // add searched city in search history list and pass search city into update DOM function
             $(`#cityList`).append(`<a href="#" class="list-group-item list-group-item-action list-group-item-info searchedCities">${$submittedCity}</a>`);
             updateDom($submittedCity);
         });
 }
 
-// this function will update the dom
+// this function will update the dom according to the city passed into it
 function updateDom(city) {
+    // retrieve an object of all weather data with key of city in question. Should already be set in local storage beforehand
     currentCityInfo = JSON.parse(localStorage.getItem(city));
     date = currentCityInfo.localDate;
     temp = currentCityInfo.localTemp;
@@ -106,6 +115,7 @@ function updateDom(city) {
     dailyWind = currentCityInfo.localDailyWind;
     dailyHumidity = currentCityInfo.localDailyHumidity;
     dailyIconURL = currentCityInfo.localDailyIconURL;
+    //update jumbotron content
     $citySubmit.siblings(`input`).val(``);
     $(`#bigCityDisplay`).text(`${city} - ${date}`);
     $(`#bigCityDisplay`).append(`<img src='' id='bigIcon'>`);
@@ -118,10 +128,11 @@ function updateDom(city) {
     if (uvIndex<2) {
         $(`#bigUVI`).css("color", "green");
     } else if (uvIndex<6) {
-        $(`#bigUVI`).css("color", "grey");
+        $(`#bigUVI`).css("color", "yellow");
     } else {
         $(`#bigUVI`).css("color", "red");
     }
+    // forecast cards updated in separate function for clarity
     addForecastCards();
 }
 
@@ -164,6 +175,7 @@ $(`#cityList`).on(`click`, `.searchedCities`, function() {
     updateDom($submittedCity);
 })
 
+//clears search history and updates dom accordingly on click
 $(`#clearSearch`).on(`click`, function() {
     $(`#cityList`).empty();
     $(`#forecastCardsList`).empty();
@@ -179,4 +191,5 @@ $(`#clearSearch`).on(`click`, function() {
     $(`#bigUVI`).css("color", "#212529");
 })
 
+//run init on page load
 init();

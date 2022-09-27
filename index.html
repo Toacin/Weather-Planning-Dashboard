@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap stylesheet CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    <!-- my stylesheet -->
     <link rel="stylesheet" href="./assets/stylesheet.css">
     <title>Weather Planning Dashboard</title>
 </head>
 <body>
+    <!-- bootstrap elements for navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav">
         <div class="container-fluid">
             <a class="navbar-brand navTitle" href="./index.html">Weather Planning Dashboard</a>
@@ -16,14 +19,17 @@
             <span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active links" aria-current="page" href="#">Github</a>
-                    <a class="nav-link links" href="#">LinkedIn</a>
-                    <a class="nav-link links" href="#">Twitter</a>
+                    <a class="nav-link active links" aria-current="page" href="https://github.com/Toacin" target="_blank">Github</a>
+                    <!-- placeholder links for both linkedin and twitter for now. Will update with personal links once developed -->
+                    <a class="nav-link links" href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+                    <a class="nav-link links" href="https://www.twitter.com" target="_blank">Twitter</a>
                 </div>
             </div>
         </div>
     </nav>
+    <!-- main content of page below -->
     <main class="row justify-content-around my-5 align-items-start cont">
+        <!-- Search Bar and search history here -->
         <section class="card city-card col-md-4 col-xxl-2 forecastCards" style="width: 18rem;">
             <div class="card-body">
                 <h3 class="card-title city-title">Search City:</h3>
@@ -35,22 +41,28 @@
             <button type="button" class="btn btn-danger my-2" id="clearSearch">Clear Search</button>
         </section>
         <section class="row col-md-8 col-xxl-9">
+            <!-- jumbotron weather display here -->
             <div class="jumbotron col-12">
                 <h1 class="display-4 bigCity" id="bigCityDisplay">Welcome to the Weather Dashboard! <img src="" id="bigIcon"></h1>
-                <p class="lead" id="bigTemp" >Temp:</p>
+                <p class="lead" id="bigTemp" >Temperature:</p>
                 <hr class="my-4">
-                <p class="lead" id="bigWind">Wind:</p>
+                <p class="lead" id="bigWind">Wind Speed:</p>
                 <hr class="my-4">
                 <p class="lead" id = "bigHumidity">Humidity:</p>
                 <hr class="my-4">
                 <p class="lead" id = "bigUVI">UV Index:</p>
             </div>
+            <!-- this div will eventually hold 5day forecast cards onced searched by user -->
             <div class="row col-12 justify-content-around" id="forecastCardsList"></div>
         </section>
     </main>
+    <!-- bootstrap script CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <!-- Moment CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <!-- my script file -->
     <script src="./assets/script.js"></script>
 </body>
 

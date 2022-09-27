@@ -1,9 +1,11 @@
+/* background image */
 body {
     background-image: url("./Images/Background5.jpg");
     background-size: cover;
     background-position: center;
 }
 
+/* nav header styled below */
 nav {
     min-height: 120px;
 }
@@ -16,6 +18,7 @@ nav {
     font-size: 30px;
 }
 
+/* search bar style below */
 .city-title {
     font-size: 40px;
 }
@@ -34,6 +37,7 @@ nav {
     width: 100vw;
 }
 
+/* jumbotron styled here */
 .jumbotron {
     padding: 2rem 1rem;
     margin-bottom: 2rem;
@@ -46,6 +50,7 @@ nav {
     font-weight:500;
 }
 
+/* forecast cards styled here */
 .forecastCards {
     background-color: rgba(201,220,218,1);
 }
