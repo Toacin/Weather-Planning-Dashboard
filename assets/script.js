@@ -47,7 +47,6 @@ function getWeather(lattitude, longitude) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
             date = moment(data.current.dt, 'X').format('LL');
             temp = data.current.temp.toFixed(1);
             wind = data.current.wind_speed;
@@ -70,6 +69,7 @@ function getWeather(lattitude, longitude) {
                 localDailyWind: dailyWind,
                 localDailyHumidity: dailyHumidity
             }))
+            $(`#cityList`).append(`<a href="#" class="list-group-item list-group-item-action list-group-item-info searchedCities">${$submittedCity}</a>`);
             updateDom($submittedCity);
         });
 }
@@ -100,7 +100,6 @@ function updateDom(city) {
     } else {
         $(`#bigUVI`).css("color", "red");
     }
-    $(`#cityList`).append(`<a href="#" class="list-group-item list-group-item-action list-group-item-info">${$submittedCity}</a>`);
     addForecastCards();
 }
 
@@ -108,7 +107,7 @@ function addForecastCards() {
     $(`#forecastCardsList`).empty();
     for (i=0; i<5; i++) {
         $(`#forecastCardsList`).append(`
-        <div class="card col-2 forecastCards my-2 forecastCardItem" style="width: 18rem;">
+        <div class="card col-2 forecastCards my-2" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card- my-3">${dailyDate[i]}</h5>
                 <p class="card-text">Temp: ${dailyTemp[i]}°F</p>
@@ -124,3 +123,7 @@ function addForecastCards() {
 
 $citySubmit.on(`click`, citySubmitHandler);
 
+$(`#cityList`).on(`click`, `.searchedCities`, function() {
+    $submittedCity = $(this).text();
+    updateDom($submittedCity);
+})
