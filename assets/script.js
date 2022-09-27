@@ -14,7 +14,7 @@ function citySubmitHandler() {
 }
 
 function getCord(city) {
-    let requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=d707b8ed3b053f7a5311a05774362adc`;
+    let requestUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=d707b8ed3b053f7a5311a05774362adc`;
 
     fetch(requestUrl)
         .then(function (response) {
@@ -28,7 +28,7 @@ function getCord(city) {
 }
 
 function getWeather(lattitude, longitude) {
-    let requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lattitude}&lon=${longitude}&appid=d707b8ed3b053f7a5311a05774362adc`;
+    let requestUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lattitude}&lon=${longitude}&exclude=hourly,minutely&units=imperial&appid=d707b8ed3b053f7a5311a05774362adc`;
 
     fetch(requestUrl)
         .then(function (response) {
@@ -36,12 +36,14 @@ function getWeather(lattitude, longitude) {
         })
         .then(function (data) {
             console.log(data);
-            temp = 1.8*(data.main.temp-273) + 32;
-            wind = data.wind.speed;
-            humidity = data.main.humidity;
+            temp = data.current.temp;
+            wind = data.current.wind_speed;
+            humidity = data.current.humidity;
+            uvIndex = data.current.uvi;
             console.log(temp.toFixed(1) +'° farenheit');
             console.log(wind + ' mph');
             console.log(humidity + ' %');
+            console.log(uvIndex);
         });
 }
 
